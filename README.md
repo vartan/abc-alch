@@ -26,6 +26,10 @@ If the mouse is not over the intersection point while you are casting the alch s
 
 The overlay will disappear after 1 minute without casting alchemy.
 
+## Config
+
+![Settings](assets/config.png)
+
 ## FAQ
 
 ### Does this plugin support Low Alch or Explorer's ring?
