@@ -89,7 +89,7 @@ public class AbcAlchOverlay extends Overlay {
             Widget spellbookTab = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
             // If the user is in the wrong tab, point them to the right tab.
             // TODO: This isn't part of the alch intersection, should be moved to its own function with its own config.
-            if (!spellbookTab.isHidden() && !menuIsCast) {
+            if (spellbookTab != null && !spellbookTab.isHidden() && !menuIsCast) {
                 graphics.setColor(Color.GREEN);
                 graphics.draw(spellbookTab.getBounds());
             }
