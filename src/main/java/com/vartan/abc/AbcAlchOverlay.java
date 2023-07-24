@@ -83,7 +83,7 @@ public class AbcAlchOverlay extends Overlay {
         graphics.setStroke(new BasicStroke(2));
 
         boolean menuIsCast = plugin.menuIsCast();
-        if (!magicWidget.isHidden() || (menuIsCast && mouseIntersects)) {
+        if (magicWidget != null && !magicWidget.isHidden() || (menuIsCast && mouseIntersects)) {
             graphics.setColor(isReady ? Color.GREEN : Color.YELLOW);
         } else {
             Widget spellbookTab = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
