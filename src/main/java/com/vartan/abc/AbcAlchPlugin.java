@@ -241,7 +241,7 @@ public class AbcAlchPlugin extends Plugin {
      * Run when the user logs in, or when they enable the plugin while logged in.
      */
     private void onLoginOrActivated() {
-        updatePriceList();
+        readyForPriceUpdate = true;
         xpTracker.update(client);
     }
 }
