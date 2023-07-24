@@ -38,7 +38,10 @@ public class AbcAlchOverlay extends Overlay {
         // TODO: Update bounds less often, this doesn't need to be recalculated every frame.
         Widget magicWidget = client.getWidget(WidgetID.SPELLBOOK_GROUP_ID, Spell.HIGH_LEVEL_ALCHEMY.widgetChildId);
         if (magicWidget != null) {
-            alchBounds = magicWidget.getBounds();
+            Rectangle maybeBounds = magicWidget.getBounds();
+            if (maybeBounds != null) {
+                alchBounds = maybeBounds;
+            }
         }
         updateInventoryBounds(graphics);
 
@@ -121,6 +124,9 @@ public class AbcAlchOverlay extends Overlay {
             }
 
             Rectangle itemBounds = item.getBounds();
+            if (itemBounds == null) {
+                continue;
+            }
             Rectangle intersection = alchBounds.intersection(itemBounds);
             if (intersection.isEmpty()) {
                 // An empty rectangle does not necessarily have a width/height of 0.
