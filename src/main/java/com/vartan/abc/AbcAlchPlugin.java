@@ -147,6 +147,11 @@ public class AbcAlchPlugin extends Plugin {
     @Override
     protected void shutDown() throws Exception {
         clientToolbar.removeNavigation(navButton);
+        overlayManager.remove(abcAlchOverlay);
+        // Remove counters since they will be reinstalled on startup.
+        for(TickCounter counter : tickCounters) {
+            tickCounters.remove(counter);
+        }
     }
 
     @Subscribe
