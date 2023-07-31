@@ -40,11 +40,15 @@ public class AbcAlchPlugin extends Plugin {
     private static final int TICKS_PER_MINUTE = 100;
     public final TickCounter magicTicker = new TickCounter();
     /**
-     * When this timer is running, the alch overlay will be visible.
+     * When this timer is running, the alch overlay and spellbook hint will be visible.
      * <p>
      * It is set to 1 minute whenever alchemy is being cast.
      */
     public final TickCounter alchOverlayTimer = new TickCounter();
+
+    /** When this timer is running, the spellbook hint will be hidden. */
+    public final TickCounter hideSpellbookHintTimer = new TickCounter();
+
     /**
      * Whether to update the price list at the next available time, at which point this will be reset to false.
      */
@@ -105,6 +109,7 @@ public class AbcAlchPlugin extends Plugin {
 
         tickCounters.add(magicTicker);
         tickCounters.add(alchOverlayTimer);
+        tickCounters.add(hideSpellbookHintTimer);
         overlayManager.add(abcAlchOverlay);
 
     }
@@ -164,7 +169,10 @@ public class AbcAlchPlugin extends Plugin {
 
     @Subscribe
     public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked) {
-        // TODO: check positive alch click on item.
+        boolean wasAlch = menuOptionClicked.getMenuAction() == MenuAction.WIDGET_TARGET_ON_WIDGET && menuOptionClicked.getMenuTarget().contains("High Level Alchemy");
+        if(wasAlch) {
+            hideSpellbookHintTimer.set(Spell.HIGH_LEVEL_ALCHEMY.cooldown + 1);
+        }
     }
 
     @Subscribe

@@ -28,6 +28,8 @@ The overlay will disappear after 1 minute without casting alchemy.
 
 ## Config
 
+Once installed, hover over any item in the config to see a tooltip with a detailed description.
+
 ![Settings](assets/config.png)
 
 ## FAQ

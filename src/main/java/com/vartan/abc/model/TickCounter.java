@@ -1,5 +1,6 @@
 package com.vartan.abc.model;
 
+
 import java.time.Duration;
 import java.time.Instant;
 
@@ -23,6 +24,9 @@ public class TickCounter {
 
     public int getTicksRemaining() {
         return Math.max(ticks, 0);
+    }
+    public int getTicksElapsed() {
+        return fullValue - getTicksRemaining();
     }
 
     public boolean justElapsed() {
@@ -62,5 +66,10 @@ public class TickCounter {
         double ticksRemaining = wholeTicksRemaining - fractionalTickPercent;
         double ticksPercent = 1.0 - ticksRemaining / (double) fullValue;
         return ticksPercent;
+    }
+
+    /** Returns the full value of the timer when it was set. */
+    public int getFullValue() {
+        return fullValue;
     }
 }

@@ -2,7 +2,6 @@ package com.vartan.abc;
 
 import com.vartan.abc.model.Spell;
 import com.vartan.abc.util.PointUtil;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
@@ -14,8 +13,14 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import javax.inject.Inject;
 import java.awt.*;
 
-@Slf4j
 public class AbcAlchOverlay extends Overlay {
+
+    private static WidgetInfo[] SPELLBOOK_ICON_IDS = {
+            WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON,
+            WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON,
+            WidgetInfo.FIXED_VIEWPORT_MAGIC_ICON
+    };
+
     private final Client client;
     private final AbcAlchConfig config;
     private final AbcAlchPlugin plugin;
@@ -52,16 +57,16 @@ public class AbcAlchOverlay extends Overlay {
         }
 
         if (alchBounds != null && config.showAlchBounds()) {
-            graphics.setColor(Color.PINK);
+            graphics.setColor(config.alchBoundsColor());
             graphics.draw(alchBounds);
         }
 
         if (optimalItemBounds != null && config.showItemBounds()) {
-            graphics.setColor(Color.YELLOW);
+            graphics.setColor(config.itemBoundsColor());
             graphics.draw(optimalItemBounds);
         }
-
         renderAlchIntersection(graphics, magicWidget);
+        renderSpellbookClickHint(graphics, magicWidget);
         return null;
     }
 
@@ -71,35 +76,86 @@ public class AbcAlchOverlay extends Overlay {
         }
         double magicReadyPercent = plugin.magicTicker.getPercentDone();
         boolean isReady = magicReadyPercent == 1.0;
-        Rectangle fillRect = getAlchFillRect(magicReadyPercent);
-        boolean mouseIntersects = alchIntersection.contains(PointUtil.toAwtPoint(client.getMouseCanvasPosition()));
+        boolean mouseIntersects = alchIntersectionContainsMouse();
 
+        Rectangle fillRect = getAlchFillRect(magicReadyPercent);
         // Draw an opaque border around the progress bar to make its position more obvious.
-        graphics.setColor(new Color(isReady ? 0f : 0.5f, 1f, 0f, 1));
+
+        Color statusColor = isReady ? config.readyColor() : config.pendingColor();
+        graphics.setColor(statusColor);
         graphics.draw(fillRect);
 
         // Fill translucent progress bar inside the intersection box.
-        graphics.setColor(new Color(isReady ? 0f : 0.5f, 1f, 0f, 0.5f * (float) magicReadyPercent));
+        graphics.setColor(getAlchIntersectionColor((float) magicReadyPercent));
         graphics.fill(fillRect);
-
-        // Draw border around the alch intersection area.
-        graphics.setStroke(new BasicStroke(2));
 
         boolean menuIsCast = plugin.menuIsCast();
         if (magicWidget != null && !magicWidget.isHidden() || (menuIsCast && mouseIntersects)) {
-            graphics.setColor(isReady ? Color.GREEN : Color.YELLOW);
+            graphics.setColor(statusColor);
         } else {
-            Widget spellbookTab = client.getWidget(WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON);
-            // If the user is in the wrong tab, point them to the right tab.
-            // TODO: This isn't part of the alch intersection, should be moved to its own function with its own config.
-            if (spellbookTab != null && !spellbookTab.isHidden() && !menuIsCast) {
-                graphics.setColor(Color.GREEN);
-                graphics.draw(spellbookTab.getBounds());
-            }
             // Make it obvious to the user that clicking the intersection box will not alch.
-            graphics.setColor(Color.RED);
+            graphics.setColor(config.misclickColor());
         }
         graphics.draw(alchIntersection);
+
+        graphics.setColor(new Color(1, 1, 1, .5f));
+    }
+
+    private boolean alchIntersectionContainsMouse() {
+        return alchIntersection.contains(PointUtil.toAwtPoint(client.getMouseCanvasPosition()));
+    }
+
+    public void renderSpellbookClickHint(Graphics2D graphics, Widget magicWidget) {
+        if (!config.spellbookClickHint() || plugin.hideSpellbookHintTimer.isRunning() || (magicWidget != null && !magicWidget.isHidden())) {
+            // Don't render the spellbook hint if the spellbook is open and the alch spell is visible.
+            return;
+        }
+        if (plugin.alchOverlayTimer.getTicksElapsed() == 0) {
+            // Don't render the spellbook hint during the first tick before the client returns to the
+            // spellbook tab.
+            return;
+        }
+        if(plugin.magicTicker.isRunning() && plugin.alchOverlayTimer.getTicksElapsed() > plugin.magicTicker.getFullValue()) {
+            // The user may have queued the next alch, avoid showing spellbook hint until the current
+            // is complete.
+            return;
+        }
+        Widget spellbookTab = getVisibleSpellbookTabWidget();
+        if (spellbookTab == null) {
+            // Don't render the spellbook hint if the spellbook tab is hidden.
+            return;
+        }
+        boolean menuIsCast = plugin.menuIsCast();
+        if (menuIsCast) {
+            // Don't render the spellbook hint if the alch spell is selected.
+            return;
+        }
+        graphics.setColor(config.spellbookClickHintColor());
+        graphics.draw(spellbookTab.getBounds());
+    }
+
+    private Widget getVisibleSpellbookTabWidget() {
+        Widget tabWidget = null;
+        for (int i = 0; i < SPELLBOOK_ICON_IDS.length && tabWidget == null; i++) {
+            tabWidget = client.getWidget(SPELLBOOK_ICON_IDS[i]);
+            if(tabWidget != null && tabWidget.isHidden()) {
+                tabWidget = null;
+            }
+        }
+        return tabWidget;
+    }
+
+    public Color getAlchIntersectionColor(float magicReadyPercent) {
+        Color readyColor = config.readyColor();
+        Color pendingColor = config.pendingColor();
+        float magicRemainingPercent = 1f - magicReadyPercent;
+
+        return new Color(
+                Math.min(1f, readyColor.getRed() / 255f * magicReadyPercent + pendingColor.getRed() / 255f * magicRemainingPercent),
+                Math.min(1f, readyColor.getGreen() / 255f * magicReadyPercent + pendingColor.getGreen() / 255f * magicRemainingPercent),
+                Math.min(1f, readyColor.getBlue() / 255f * magicReadyPercent + pendingColor.getBlue() / 255f * magicRemainingPercent),
+                (float) config.intersectionFillOpacity() * (readyColor.getAlpha() / 255f * magicReadyPercent + pendingColor.getAlpha() / 255f * magicRemainingPercent)
+        );
     }
 
 
@@ -112,7 +168,6 @@ public class AbcAlchOverlay extends Overlay {
         if (dynamicChildren.length == 0) {
             return;
         }
-        graphics.setStroke(new BasicStroke(1));
 
         double largestIntersectionArea = 1;
         Rectangle largestOverlapItemBounds = null;
@@ -158,12 +213,12 @@ public class AbcAlchOverlay extends Overlay {
      */
     private Rectangle getAlchFillRect(double magicReadyPercent) {
         if (alchIntersection.getHeight() > alchIntersection.getWidth()) {
-            int indicatorY = (int) (alchIntersection.getY() + alchIntersection.getHeight() * (1.0 - magicReadyPercent));
-            int indicatorHeight = (int) (alchIntersection.getHeight() * magicReadyPercent);
+            int indicatorY = (int) Math.round(alchIntersection.getY() + alchIntersection.getHeight() * (1.0 - magicReadyPercent));
+            int indicatorHeight = (int) Math.round(alchIntersection.getHeight() * magicReadyPercent);
             return new Rectangle((int) alchIntersection.getX(), indicatorY, (int) alchIntersection.getWidth(), indicatorHeight);
         } else {
             return new Rectangle((int) alchIntersection.getX(), (int) alchIntersection.getY(),
-                    (int) (alchIntersection.getWidth() * magicReadyPercent), (int) alchIntersection.getHeight());
+                    (int) Math.round(alchIntersection.getWidth() * magicReadyPercent), (int) Math.round(alchIntersection.getHeight()));
         }
     }
 }
