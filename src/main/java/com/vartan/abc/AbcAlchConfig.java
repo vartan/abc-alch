@@ -29,7 +29,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "readyColor",
-            name = "Ready Color",
+            name = "Ready color",
             description = "Shown on the spellbook when alchemy is ready, and in the inventory when the mouse is over " +
                     "the alch intersection area.",
             section = alchIntersectionSection,
@@ -41,7 +41,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "pendingColor",
-            name = "Pending Color",
+            name = "Pending color",
             description = "Shown while the player is busy casting alchemy.",
             section = alchIntersectionSection,
             position = 2
@@ -52,7 +52,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "misclickColor",
-            name = "Misclick Color",
+            name = "Misclick color",
             description = "Shown when the next click will perform alchemy and the mouse isn't in the alch " +
                     "intersection area, or otherwise when clicking in the intersection would not be productive.",
             section = alchIntersectionSection,
@@ -64,7 +64,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "intersectionFillOpacity",
-            name = "Intersection Fill Opacity",
+            name = "Intersection fill opacity",
             description = "From 0-1, how opaque should the intersection be filled?",
             section = alchIntersectionSection,
             position = 4
@@ -93,7 +93,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "Alch bounds color",
-            name = "Show bounds color",
+            name = "Alch bounds color",
             description = "What color to draw around the alchemy spell, when enabled.",
             section = miscSection,
             position = 1
@@ -116,7 +116,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "Alch item color",
-            name = "Show item color",
+            name = "Item bounds color",
             description = "What color to draw around the optimal item, when enabled.",
             section = miscSection,
             position = 3
@@ -150,7 +150,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "spellbookClickHint",
-            name = "Spellbook Click Hint",
+            name = "Spellbook click hint",
             description = "Whether to draw a box around the spellbook tab when clicking it is necessary for the next " +
                     "alch.",
             section = miscSection,
@@ -162,7 +162,7 @@ public interface AbcAlchConfig extends Config {
 
     @ConfigItem(
             keyName = "spellbookClickHintColor",
-            name = "Spellbook Click Hint Color",
+            name = "Spellbook click hint Color",
             description = "What color to draw around the spellbook when spellbook click hint is enabled.",
             section = miscSection,
             position = 6
