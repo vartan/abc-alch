@@ -2,6 +2,8 @@
 
 *Always be casting* alchemy.
 
+![icon](assets/icon.png)
+
 ## GE Alch Calculator
 
 This plugin adds an alchemy calculator to the RuneLite sidebar that lets you quickly see which items are most profitable for Alchemy. 
