@@ -3,8 +3,9 @@ package com.vartan.abc;
 import com.vartan.abc.model.Spell;
 import com.vartan.abc.util.PointUtil;
 import net.runelite.api.Client;
+import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -15,10 +16,10 @@ import java.awt.*;
 
 public class AbcAlchOverlay extends Overlay {
 
-    private static WidgetInfo[] SPELLBOOK_ICON_IDS = {
-            WidgetInfo.RESIZABLE_VIEWPORT_MAGIC_ICON,
-            WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON,
-            WidgetInfo.FIXED_VIEWPORT_MAGIC_ICON
+    private static int[] SPELLBOOK_ICON_IDS = {
+            ComponentID.RESIZABLE_VIEWPORT_MAGIC_ICON,
+            ComponentID.RESIZABLE_VIEWPORT_BOTTOM_LINE_MAGIC_ICON,
+            ComponentID.FIXED_VIEWPORT_MAGIC_ICON
     };
 
     private final Client client;
@@ -41,7 +42,7 @@ public class AbcAlchOverlay extends Overlay {
 
     public Dimension render(Graphics2D graphics) {
         // TODO: Update bounds less often, this doesn't need to be recalculated every frame.
-        Widget magicWidget = client.getWidget(WidgetID.SPELLBOOK_GROUP_ID, Spell.HIGH_LEVEL_ALCHEMY.widgetChildId);
+        Widget magicWidget = client.getWidget(InterfaceID.SPELLBOOK, Spell.HIGH_LEVEL_ALCHEMY.widgetChildId);
         if (magicWidget != null) {
             Rectangle maybeBounds = magicWidget.getBounds();
             if (maybeBounds != null) {
