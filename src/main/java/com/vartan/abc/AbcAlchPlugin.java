@@ -195,7 +195,12 @@ public class AbcAlchPlugin extends Plugin {
     public void onGameTick(GameTick event) {
         tickCounters.forEach(TickCounter::tick);
 
-        if (magicTicker.justElapsed()) {
+        if (magicTicker.justElapsed() && alchOverlayTimer.isRunning()) {
+            // The overlay timer is checked to ensure we only play audio hints
+            // after a user has actually cast an alchemy spell. Since we infer
+            // a spell is cast using XP gained on a tick, there can otherwise be
+            // false positives when other spells (such as combat spells) provide
+            // the same exact XP.
             maybePlayAudioHint();
         }
 
