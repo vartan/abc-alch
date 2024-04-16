@@ -2,7 +2,6 @@ package com.vartan.abc;
 
 import com.vartan.abc.model.AlchItem;
 import com.vartan.abc.util.IntegerUtil;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.ColorScheme;
@@ -17,8 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
-@Slf4j
 
 public class AbcAlchPanel extends PluginPanel {
 
@@ -41,8 +38,6 @@ public class AbcAlchPanel extends PluginPanel {
         this.searchButton = new JButton("Search");
         DocumentListener onInputChanged = new DocumentListener() {
             void update(DocumentEvent e) {
-                log.info("setting Search");
-
                 searchButton.setText("Search");
                 searchButton.revalidate();
             }
