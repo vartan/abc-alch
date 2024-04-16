@@ -11,6 +11,8 @@ import net.runelite.client.ui.PluginPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,12 +31,36 @@ public class AbcAlchPanel extends PluginPanel {
     JComboBox priceSourceBox;
     AbcAlchPlugin plugin;
     JPanel alchList;
+    JButton searchButton;
 
     public AbcAlchPanel(AbcAlchPlugin plugin, Client client, ItemManager itemManager) {
         super();
         this.plugin = plugin;
         this.client = client;
         this.itemManager = itemManager;
+        this.searchButton = new JButton("Search");
+        DocumentListener onInputChanged = new DocumentListener() {
+            void update(DocumentEvent e) {
+                log.info("setting Search");
+
+                searchButton.setText("Search");
+                searchButton.revalidate();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update(e);
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update(e);
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update(e);
+            }
+        };
+
         setBorder(new EmptyBorder(6, 6, 6, 6));
         setBackground(ColorScheme.DARK_GRAY_COLOR);
         setLayout(new BorderLayout());
@@ -47,11 +73,13 @@ public class AbcAlchPanel extends PluginPanel {
         JPanel maxPriceRow = createLabeledRow("Max Price:", maxPriceField);
         maxPriceRow.setToolTipText("Filters out items with a GE price more than the given value. 0 to disable.");
         layoutPanel.add(maxPriceRow);
+        maxPriceField.getDocument().addDocumentListener(onInputChanged);
 
         minimumTradeLimitField = new JTextField();
         JPanel minimumTradeLimitRow = createLabeledRow("Min Trade Limit:", minimumTradeLimitField);
         minimumTradeLimitRow.setToolTipText("Filters out items with a trade limit less than the given value. " + "0 to disable.");
         layoutPanel.add(minimumTradeLimitRow);
+        minimumTradeLimitField.getDocument().addDocumentListener(onInputChanged);
 
         priceSourceBox = new JComboBox(PRICE_SOURCE_OPTIONS);
         priceSourceBox.setSelectedIndex(0);
@@ -64,7 +92,6 @@ public class AbcAlchPanel extends PluginPanel {
         });
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
 
-        JButton searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,6 +131,8 @@ public class AbcAlchPanel extends PluginPanel {
      * Clears and regenerates the item list panel using the list of alch items.
      */
     public void updateItemList() {
+        searchButton.setText("Refresh");
+        searchButton.revalidate();
         if (plugin.getAlchItems() == null) {
             return;
         }
