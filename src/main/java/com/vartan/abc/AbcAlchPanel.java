@@ -3,6 +3,7 @@ package com.vartan.abc;
 import com.vartan.abc.model.AlchItem;
 import com.vartan.abc.util.IntegerUtil;
 import net.runelite.api.Client;
+import net.runelite.api.ItemComposition;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
