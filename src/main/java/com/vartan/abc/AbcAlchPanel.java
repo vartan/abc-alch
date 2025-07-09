@@ -91,13 +91,6 @@ public class AbcAlchPanel extends PluginPanel {
         layoutPanel.add(minimumTradeLimitRow);
         minimumTradeLimitField.getDocument().addDocumentListener(onInputChanged);
 
-        filterMemberItems = new JToggleButton();
-        JPanel filterMemberItemsRow = createLabeledRow("Hide Member Items:", filterMemberItems);
-        filterMemberItemsRow.setToolTipText("If you're like to hide member items from the list.");
-        layoutPanel.add(filterMemberItemsRow);
-        filterMemberItems.addItemListener(itemListener);
-
-
         priceSourceBox = new JComboBox(PRICE_SOURCE_OPTIONS);
         priceSourceBox.setSelectedIndex(0);
         priceSourceBox.addActionListener(new ActionListener() {
@@ -108,6 +101,12 @@ public class AbcAlchPanel extends PluginPanel {
             }
         });
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
+
+        filterMemberItems = new JCheckBox();
+        JPanel filterMemberItemsRow = createLabeledRow("Hide Member Items:", filterMemberItems);
+        filterMemberItemsRow.setToolTipText("If you're like to hide member items from the list.");
+        layoutPanel.add(filterMemberItemsRow);
+        filterMemberItems.addItemListener(itemListener);
 
         searchButton.addActionListener(new ActionListener() {
             @Override
