@@ -3,6 +3,7 @@ package com.vartan.abc;
 import com.vartan.abc.model.AlchItem;
 import com.vartan.abc.util.IntegerUtil;
 import net.runelite.api.Client;
+import net.runelite.api.ItemComposition;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
@@ -15,6 +16,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 
 public class AbcAlchPanel extends PluginPanel {
@@ -25,6 +28,7 @@ public class AbcAlchPanel extends PluginPanel {
     private final ItemManager itemManager;
     JTextField minimumTradeLimitField;
     JTextField maxPriceField;
+    JToggleButton filterMemberItems;
     JComboBox priceSourceBox;
     AbcAlchPlugin plugin;
     JPanel alchList;
@@ -56,6 +60,18 @@ public class AbcAlchPanel extends PluginPanel {
             }
         };
 
+        ItemListener itemListener = new ItemListener() {
+            void update(ItemEvent e) {
+                searchButton.setText("Search");
+                searchButton.revalidate();
+            }
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                update(e);
+            }
+        };
+
         setBorder(new EmptyBorder(6, 6, 6, 6));
         setBackground(ColorScheme.DARK_GRAY_COLOR);
         setLayout(new BorderLayout());
@@ -75,6 +91,13 @@ public class AbcAlchPanel extends PluginPanel {
         minimumTradeLimitRow.setToolTipText("Filters out items with a trade limit less than the given value. " + "0 to disable.");
         layoutPanel.add(minimumTradeLimitRow);
         minimumTradeLimitField.getDocument().addDocumentListener(onInputChanged);
+
+        filterMemberItems = new JToggleButton();
+        JPanel filterMemberItemsRow = createLabeledRow("Hide Member Items:", filterMemberItems);
+        filterMemberItemsRow.setToolTipText("If you're like to hide member items from the list.");
+        layoutPanel.add(filterMemberItemsRow);
+        filterMemberItems.addItemListener(itemListener);
+
 
         priceSourceBox = new JComboBox(PRICE_SOURCE_OPTIONS);
         priceSourceBox.setSelectedIndex(0);
@@ -136,6 +159,10 @@ public class AbcAlchPanel extends PluginPanel {
             int geLimit = item.getGeLimit();
             int minimumTradeLimit = readNumericTextField(this.minimumTradeLimitField);
             int maxPrice = readNumericTextField(this.maxPriceField);
+            boolean memberItem = item.getIsMember();
+            if (this.filterMemberItems.isSelected() && memberItem) {
+                continue;
+            }
             boolean filterGeLimit = geLimit != 0 && minimumTradeLimit != 0 && geLimit < minimumTradeLimit;
             boolean filterPrice = maxPrice != 0 && item.getGePrice() >= maxPrice;
             if (filterGeLimit || filterPrice) {
