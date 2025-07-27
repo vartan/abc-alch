@@ -102,8 +102,7 @@ public class AbcAlchPanel extends PluginPanel {
         });
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
 
-        includeMemberItems = new JCheckBox();
-        includeMemberItems.doClick();
+        includeMemberItems = new JCheckBox("",true);
         JPanel includeMemberItemsRow = createLabeledRow("Members' Items:", includeMemberItems);
         includeMemberItemsRow.setToolTipText("Include items that are members only.");
         layoutPanel.add(includeMemberItemsRow);
