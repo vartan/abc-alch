@@ -134,14 +134,14 @@ public class AbcAlchPlugin extends Plugin {
             int highAlchPrice = itemComposition.getHaPrice();
             int highAlchProfit = highAlchPrice - gePrice - natureRunePrice;
             int geLimit = itemStats.getGeLimit();
-            boolean isMember = itemComposition.isMembers();
+            boolean isMembers = itemComposition.isMembers();
             if (highAlchProfit < 0) {
                 // Avoid creating entries for items that will never be displayed.
                 continue;
             }
 
             BufferedImage image = itemManager.getImage(itemId, geLimit, false);
-            tempAlchItems.add(new AlchItem(name, gePrice, highAlchPrice, highAlchProfit, geLimit, isMember, image));
+            tempAlchItems.add(new AlchItem(name, gePrice, highAlchPrice, highAlchProfit, geLimit, isMembers, image));
         }
         // Sort by high alchemy profit,
         this.alchItems = Ordering.from(Comparator.comparing(AlchItem::getHighAlchProfit)).reverse().immutableSortedCopy(tempAlchItems);

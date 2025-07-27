@@ -10,18 +10,18 @@ public class AlchItem {
     private final String name;
     private final int gePrice;
     private final int geLimit;
-    private final boolean isMember;
+    private final boolean isMembers;
     private final BufferedImage image;
     private final int highAlchPrice;
     private final int highAlchProfit;
 
-    public AlchItem(String name, int gePrice, int highAlchPrice, int highAlchProfit, int geLimit, boolean isMember, BufferedImage image) {
+    public AlchItem(String name, int gePrice, int highAlchPrice, int highAlchProfit, int geLimit, boolean isMembers, BufferedImage image) {
         this.name = name;
         this.gePrice = gePrice;
         this.highAlchPrice = highAlchPrice;
         this.highAlchProfit = highAlchProfit;
         this.geLimit = geLimit;
-        this.isMember = isMember;
+        this.isMembers = isMembers;
         this.image = createAlchImage(image, geLimit);
     }
 
@@ -46,8 +46,8 @@ public class AlchItem {
         return geLimit;
     }
 
-    public boolean getIsMember() {
-        return isMember;
+    public boolean getIsMembers() {
+        return isMembers;
     }
 
     public int getHighAlchProfit() {

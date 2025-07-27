@@ -103,8 +103,8 @@ public class AbcAlchPanel extends PluginPanel {
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
 
         filterMemberItems = new JCheckBox();
-        JPanel filterMemberItemsRow = createLabeledRow("Hide Member Items:", filterMemberItems);
-        filterMemberItemsRow.setToolTipText("If you're like to hide member items from the list.");
+        JPanel filterMemberItemsRow = createLabeledRow("Hide Members' Item:", filterMemberItems);
+        filterMemberItemsRow.setToolTipText("If you'd like to hide members' item from the list.");
         layoutPanel.add(filterMemberItemsRow);
         filterMemberItems.addItemListener(itemListener);
 
@@ -157,8 +157,8 @@ public class AbcAlchPanel extends PluginPanel {
             int geLimit = item.getGeLimit();
             int minimumTradeLimit = readNumericTextField(this.minimumTradeLimitField);
             int maxPrice = readNumericTextField(this.maxPriceField);
-            boolean memberItem = item.getIsMember();
-            if (this.filterMemberItems.isSelected() && memberItem) {
+            boolean isMembers = item.getIsMembers();
+            if (this.filterMemberItems.isSelected() && isMembers) {
                 continue;
             }
             boolean filterGeLimit = geLimit != 0 && minimumTradeLimit != 0 && geLimit < minimumTradeLimit;
