@@ -15,6 +15,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 
 public class AbcAlchPanel extends PluginPanel {
@@ -25,6 +27,7 @@ public class AbcAlchPanel extends PluginPanel {
     private final ItemManager itemManager;
     JTextField minimumTradeLimitField;
     JTextField maxPriceField;
+    JToggleButton includeMemberItems;
     JComboBox priceSourceBox;
     AbcAlchPlugin plugin;
     JPanel alchList;
@@ -52,6 +55,18 @@ public class AbcAlchPanel extends PluginPanel {
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
+                update(e);
+            }
+        };
+
+        ItemListener itemListener = new ItemListener() {
+            void update(ItemEvent e) {
+                searchButton.setText("Search");
+                searchButton.revalidate();
+            }
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
                 update(e);
             }
         };
@@ -86,6 +101,12 @@ public class AbcAlchPanel extends PluginPanel {
             }
         });
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
+
+        includeMemberItems = new JCheckBox("", true);
+        JPanel includeMemberItemsRow = createLabeledRow("Members' Items:", includeMemberItems);
+        includeMemberItemsRow.setToolTipText("Include items that are members only.");
+        layoutPanel.add(includeMemberItemsRow);
+        includeMemberItems.addItemListener(itemListener);
 
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -136,6 +157,10 @@ public class AbcAlchPanel extends PluginPanel {
             int geLimit = item.getGeLimit();
             int minimumTradeLimit = readNumericTextField(this.minimumTradeLimitField);
             int maxPrice = readNumericTextField(this.maxPriceField);
+            boolean isMembers = item.getIsMembers();
+            if (!this.includeMemberItems.isSelected() && isMembers) {
+                continue;
+            }
             boolean filterGeLimit = geLimit != 0 && minimumTradeLimit != 0 && geLimit < minimumTradeLimit;
             boolean filterPrice = maxPrice != 0 && item.getGePrice() >= maxPrice;
             if (filterGeLimit || filterPrice) {
