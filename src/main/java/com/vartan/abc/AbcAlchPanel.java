@@ -27,7 +27,7 @@ public class AbcAlchPanel extends PluginPanel {
     private final ItemManager itemManager;
     JTextField minimumTradeLimitField;
     JTextField maxPriceField;
-    JToggleButton filterMemberItems;
+    JToggleButton includeMemberItems;
     JComboBox priceSourceBox;
     AbcAlchPlugin plugin;
     JPanel alchList;
@@ -102,11 +102,12 @@ public class AbcAlchPanel extends PluginPanel {
         });
         layoutPanel.add(createLabeledRow("Price Source:", priceSourceBox));
 
-        filterMemberItems = new JCheckBox();
-        JPanel filterMemberItemsRow = createLabeledRow("Hide Members' Item:", filterMemberItems);
-        filterMemberItemsRow.setToolTipText("If you'd like to hide members' item from the list.");
-        layoutPanel.add(filterMemberItemsRow);
-        filterMemberItems.addItemListener(itemListener);
+        includeMemberItems = new JCheckBox();
+        includeMemberItems.doClick();
+        JPanel includeMemberItemsRow = createLabeledRow("Members' Items:", includeMemberItems);
+        includeMemberItemsRow.setToolTipText("Include items that are members only.");
+        layoutPanel.add(includeMemberItemsRow);
+        includeMemberItems.addItemListener(itemListener);
 
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -158,7 +159,7 @@ public class AbcAlchPanel extends PluginPanel {
             int minimumTradeLimit = readNumericTextField(this.minimumTradeLimitField);
             int maxPrice = readNumericTextField(this.maxPriceField);
             boolean isMembers = item.getIsMembers();
-            if (this.filterMemberItems.isSelected() && isMembers) {
+            if (!this.includeMemberItems.isSelected() && isMembers) {
                 continue;
             }
             boolean filterGeLimit = geLimit != 0 && minimumTradeLimit != 0 && geLimit < minimumTradeLimit;
