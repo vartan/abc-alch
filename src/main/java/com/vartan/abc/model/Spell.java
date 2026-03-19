@@ -1,8 +1,8 @@
 package com.vartan.abc.model;
 
 public enum Spell {
-    LOW_LEVEL_ALCHEMY(31, 3, 21),
-    HIGH_LEVEL_ALCHEMY(65, 5, 44);
+    LOW_LEVEL_ALCHEMY(31, 3, 22),
+    HIGH_LEVEL_ALCHEMY(65, 5, 45);
 
     public final int xpGained;
     /**
