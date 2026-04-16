@@ -1,10 +1,9 @@
 package com.vartan.abc;
 
-import com.vartan.abc.model.Spell;
 import com.vartan.abc.util.PointUtil;
 import net.runelite.api.Client;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.ComponentID;
-import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -41,7 +40,7 @@ public class AbcAlchOverlay extends Overlay {
 
     public Dimension render(Graphics2D graphics) {
         // TODO: Update bounds less often, this doesn't need to be recalculated every frame.
-        Widget magicWidget = client.getWidget(InterfaceID.SPELLBOOK, Spell.HIGH_LEVEL_ALCHEMY.widgetChildId);
+        Widget magicWidget = client.getWidget(InterfaceID.MagicSpellbook.HIGH_ALCHEMY);
         if (magicWidget != null) {
             Rectangle maybeBounds = magicWidget.getBounds();
             if (maybeBounds != null) {

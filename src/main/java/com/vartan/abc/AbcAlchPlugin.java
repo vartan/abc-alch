@@ -10,7 +10,7 @@ import com.vartan.abc.model.XpTracker;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -255,7 +255,7 @@ public class AbcAlchPlugin extends Plugin {
     public boolean menuIsCast() {
         // TODO: Support Low Alch.
         Widget selectedWidget = client.getSelectedWidget();
-        Widget alchWidget = client.getWidget(InterfaceID.SPELLBOOK, Spell.HIGH_LEVEL_ALCHEMY.widgetChildId);
+        Widget alchWidget = client.getWidget(InterfaceID.MagicSpellbook.HIGH_ALCHEMY);
         return selectedWidget != null && selectedWidget == alchWidget;
     }
 
