@@ -22,7 +22,7 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.http.api.item.ItemPrice;
-import net.runelite.http.api.item.ItemStats;
+import net.runelite.client.game.ItemStats;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -123,7 +123,7 @@ public class AbcAlchPlugin extends Plugin {
         for (ItemPrice price : itemPrices) {
             int itemId = price.getId();
             ItemComposition itemComposition = this.itemManager.getItemComposition(itemId);
-            ItemStats itemStats = itemManager.getItemStats(itemId, false);
+            ItemStats itemStats = itemManager.getItemStats(itemId);
             String name = price.getName();
             // Filter out any useless items.
             if (itemStats == null || itemComposition == null || name.length() == 0) {
