@@ -3,11 +3,11 @@ package com.vartan.abc.util;
 public class IntegerUtil {
     private static final String[] UNITS = {"", "k", "m", "b", "t"};
 
-    public static String toShorthand(int number) {
+    public static String toShorthand(long number) {
         return toShorthand(number, 1);
     }
 
-    public static String toShorthand(int number, int decimals) {
+    public static String toShorthand(long number, int decimals) {
         int unitIndex = 0;
         double output = number;
         while (output >= 1000 && unitIndex < UNITS.length - 1) {

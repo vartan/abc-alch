@@ -8,14 +8,14 @@ import java.awt.image.BufferedImage;
 
 public class AlchItem {
     private final String name;
-    private final int gePrice;
+    private final long gePrice;
     private final int geLimit;
     private final boolean isMembers;
     private final BufferedImage image;
     private final int highAlchPrice;
-    private final int highAlchProfit;
+    private final long highAlchProfit;
 
-    public AlchItem(String name, int gePrice, int highAlchPrice, int highAlchProfit, int geLimit, boolean isMembers, BufferedImage image) {
+    public AlchItem(String name, long gePrice, int highAlchPrice, long highAlchProfit, int geLimit, boolean isMembers, BufferedImage image) {
         this.name = name;
         this.gePrice = gePrice;
         this.highAlchPrice = highAlchPrice;
@@ -38,7 +38,7 @@ public class AlchItem {
         return bufferedImage;
     }
 
-    public int getGePrice() {
+    public long getGePrice() {
         return gePrice;
     }
 
@@ -50,7 +50,7 @@ public class AlchItem {
         return isMembers;
     }
 
-    public int getHighAlchProfit() {
+    public long getHighAlchProfit() {
         return highAlchProfit;
     }
 

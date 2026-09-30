@@ -117,7 +117,7 @@ public class AbcAlchPlugin extends Plugin {
     public void updatePriceList() {
         // TODO: Inquire about making a PR which introduces a function that returns all GE tradeable ItemPrices.
         List<ItemPrice> itemPrices = this.itemManager.search("");
-        int natureRunePrice = this.itemManager.getItemPrice(ItemID.NATURE_RUNE);
+        long natureRunePrice = this.itemManager.getItemPrice(ItemID.NATURE_RUNE);
 
         ArrayList<AlchItem> tempAlchItems = new ArrayList<>();
         for (ItemPrice price : itemPrices) {
@@ -130,9 +130,9 @@ public class AbcAlchPlugin extends Plugin {
                 continue;
             }
 
-            int gePrice = this.useWikiPrices ? itemManager.getWikiPrice(price) : price.getPrice();
+            long gePrice = this.useWikiPrices ? itemManager.getWikiPrice(price) : price.getPrice();
             int highAlchPrice = itemComposition.getHaPrice();
-            int highAlchProfit = highAlchPrice - gePrice - natureRunePrice;
+            long highAlchProfit = highAlchPrice - gePrice - natureRunePrice;
             int geLimit = itemStats.getGeLimit();
             boolean isMembers = itemComposition.isMembers();
             if (highAlchProfit < 0) {
